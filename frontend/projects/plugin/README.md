@@ -1,1 +1,1 @@
-This is the sample plugin.
+Dit is de sample plugin.

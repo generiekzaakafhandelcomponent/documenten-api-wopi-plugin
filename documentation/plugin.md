@@ -1,12 +1,13 @@
-# Plugin Documentation
+# Plugin-documentatie
 
-<!-- Use this page to document your plugin. Below is a suggested structure. -->
+<!-- Gebruik deze pagina om je plugin te documenteren. Hieronder staat een voorgestelde structuur. -->
 
-## Overview
+## Overzicht
 
-This is a sample plugin demonstrating an API call action. It fetches data from a time API endpoint.
+Dit is een voorbeeldplugin die een API-call-actie demonstreert. De plugin haalt gegevens op bij een endpoint van een
+tijd-API.
 
-## Dependencies
+## Afhankelijkheden
 
 ### Backend
 
@@ -26,7 +27,7 @@ dependencies {
 }
 ```
 
-In your `app.module.ts`:
+In je `app.module.ts`:
 
 ```typescript
 import {
@@ -48,24 +49,24 @@ import {
 })
 ```
 
-## Configuration
+## Configuratie
 
-List the plugin configuration properties and how to set them.
+Beschrijf hier de configuratie-eigenschappen van de plugin en hoe je deze instelt.
 
-| Property | Type   | Required | Description                          |
-|----------|--------|----------|--------------------------------------|
-| apiUrl   | string | Yes      | The URL of the time API to call      |
+| Eigenschap | Type   | Verplicht | Omschrijving                              |
+|------------|--------|-----------|-------------------------------------------|
+| apiUrl     | string | Ja        | De URL van de tijd-API die wordt aangeroepen |
 
-## Actions
+## Acties
 
-### Time API test action
+### Testactie tijd-API
 
-Sends a GET request to the configured API URL and returns the timezone response.
+Stuurt een GET-request naar de geconfigureerde API-URL en geeft de tijdzone-response terug.
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-|           |      |          |             |
+| Parameter | Type | Verplicht | Omschrijving |
+|-----------|------|-----------|--------------|
+|           |      |           |              |
 
-## Usage
+## Gebruik
 
-Explain how to use the plugin in a process, with examples if applicable.
+Leg uit hoe de plugin in een proces gebruikt wordt, met voorbeelden indien van toepassing.

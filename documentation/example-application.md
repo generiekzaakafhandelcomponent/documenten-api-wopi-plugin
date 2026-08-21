@@ -1,35 +1,35 @@
-# Example Application
+# Voorbeeldapplicatie
 
-This project also contains a working example application which is meant to showcase the plugin.
+Dit project bevat ook een werkende voorbeeldapplicatie die bedoeld is om de plugin te demonstreren.
 
-## Running the example application
+## De voorbeeldapplicatie draaien
 
-All commands below should be run from the **project root** directory.
+Alle onderstaande commando's moeten worden uitgevoerd vanuit de **root van het project**.
 
-### Prerequisites
+### Vereisten
 
 - Java 21
 - [Docker (Desktop)](https://www.docker.com/products/docker-desktop/)
 
-### Start docker
+### Docker starten
 
-Make sure docker is running.
+Zorg ervoor dat Docker draait.
 
-Start with gradle script:
+Starten met het gradle-script:
 
 ```shell
 ./gradlew :backend:app:composeUp
 ```
 
-### Start backend
+### Backend starten
 
-By gradle script:
+Met het gradle-script:
 
 ```shell
 ./gradlew :backend:app:bootRun
 ```
 
-### Start frontend
+### Frontend starten
 
 ```shell
 nvm use 20
@@ -39,19 +39,19 @@ npm run build
 npm start
 ```
 
-### Keycloak users
+### Keycloak-gebruikers
 
-The example application has a few test users that are preconfigured.
+De voorbeeldapplicatie heeft een aantal testgebruikers die al zijn geconfigureerd.
 
-| Name         | Role           | Username  | Password  |
-|--------------|----------------|-----------|-----------|
-| James Vance  | ROLE_USER      | user      | user      |
-| Asha Miller  | ROLE_ADMIN     | admin     | admin     |
-| Morgan Finch | ROLE_DEVELOPER | developer | developer |
+| Naam         | Rol            | Gebruikersnaam | Wachtwoord |
+|--------------|----------------|----------------|------------|
+| James Vance  | ROLE_USER      | user           | user       |
+| Asha Miller  | ROLE_ADMIN     | admin          | admin      |
+| Morgan Finch | ROLE_DEVELOPER | developer      | developer  |
 
-## Source code
+## Broncode
 
-The source code is split up into two modules:
+De broncode is opgesplitst in twee modules:
 
 1. [Frontend](/frontend)
 2. [Backend](/backend)

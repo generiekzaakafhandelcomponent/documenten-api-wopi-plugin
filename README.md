@@ -1,19 +1,19 @@
 # GZAC Plugin Template
 
-A template repository for building your own GZAC plugins. Copy this project to get a ready-made structure with build
-configuration, CI/CD workflows, and a working example to start from.
+Een template-repository om je eigen GZAC-plugins te bouwen. Kopieer dit project voor een kant-en-klare structuur met
+build-configuratie, CI/CD-workflows en een werkend voorbeeld om vanuit te starten.
 
-## Getting started
+## Aan de slag
 
-1. Copy or fork this repository
-2. Rename the sample plugin package, module, and configuration to match your plugin
-3. Follow the [Getting Started](documentation/getting-started.md) guide for setup and development instructions
+1. Kopieer of fork deze repository
+2. Geef het sample-plugin-package, de module en de configuratie een naam die past bij jouw plugin
+3. Volg de handleiding [Aan de slag](documentation/getting-started.md) voor installatie- en ontwikkelinstructies
 
-## Documentation
+## Documentatie
 
-- [Getting Started](documentation/getting-started.md) — setup and development instructions
-- [Example Application](documentation/example-application.md) — running the example app locally
-- [Sample Plugin](documentation/plugin.md) — reference implementation included in this template
+- [Aan de slag](documentation/getting-started.md) — installatie- en ontwikkelinstructies
+- [Voorbeeldapplicatie](documentation/example-application.md) — de voorbeeldapplicatie lokaal draaien
+- [Sample plugin](documentation/plugin.md) — referentie-implementatie die in deze template is opgenomen
 - [Release notes](documentation/release-notes.md) — versiegeschiedenis en wijzigingen
 
 ## Contact

@@ -1,9 +1,9 @@
-# Getting Started
+# Aan de slag
 
-1. Copy this project
-2. Rename the module from `sample-plugin` to your plugin name
-3. Update package names, class names, and plugin keys
-4. Add your own plugin logic and actions
+1. Kopieer dit project
+2. Wijzig de naam van de module `sample-plugin` naar de naam van jouw plugin
+3. Werk de package-namen, class-namen en plugin-keys bij
+4. Voeg je eigen plugin-logica en acties toe
 
-For more information on how to build a plugin, see
-the [Custom Plugin Definition](https://docs.valtimo.nl/features/plugins/plugins/custom-plugin-definition) documentation.
+Meer informatie over het bouwen van een plugin vind je in de documentatie
+over [Custom Plugin Definition](https://docs.valtimo.nl/features/plugins/plugins/custom-plugin-definition).
