@@ -1,0 +1,8 @@
+# Code owners for documenten-api-wopi-plugin
+#
+# Every change to this repository requires review from a code owner.
+# This list mirrors the repository's admins, so that write-access
+# collaborators (including outside collaborators) cannot be the sole
+# approver on a pull request.
+
+*  @DevOps-Infra-Ritense @EmmaBorkentRitense @Hildebrand-Ritense @Klaas-Ritense @MaxStrikkersRitense @ThomasMinkeRitense @erik-ritense @klaasjan-ritense @paul-ritense @pvdmritense @rutger-h @ryanritense @sjorsholtrop-ritense @theo-ritense @vincentohr-ritense
