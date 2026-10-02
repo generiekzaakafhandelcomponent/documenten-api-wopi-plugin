@@ -15,11 +15,11 @@
  */
 
 dockerCompose {
-    setProjectName("sample-plugin")
+    setProjectName("documenten-api-wopi-plugin")
     isRequiredBy(project.tasks.test)
 
     tasks.test {
-        useComposeFiles.addAll("$rootDir/docker-resources/docker-compose-base-test.yml", "docker-compose-override.yml")
+        useComposeFiles.addAll("$rootDir/docker-resources/docker-compose-base-test.yml")
     }
 }
 
@@ -32,9 +32,16 @@ dependencies {
     compileOnly("com.ritense.valtimo:plugin-valtimo")
     compileOnly("com.ritense.valtimo:process-document")
     compileOnly("com.ritense.valtimo:contract")
+    compileOnly("com.ritense.valtimo:documenten-api")
+    compileOnly("com.ritense.valtimo:zgw")
+    compileOnly("com.ritense.valtimo:logging")
     compileOnly("org.operaton.bpm:operaton-engine:$operatonVersion")
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
     compileOnly("org.springframework.boot:spring-boot-starter-web")
+    compileOnly("org.springframework.boot:spring-boot-starter-security")
+    compileOnly("org.springframework.boot:spring-boot-starter-data-jpa")
+    compileOnly("org.springframework:spring-webflux")
+    compileOnly("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
 
     compileOnly("io.github.oshai:kotlin-logging:$kotlinLoggingVersion")
 

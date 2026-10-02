@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.ritense.valtimoplugins.sampleplugin.plugin
+package com.ritense.valtimoplugins.documentenapiwopi
 
+import com.ritense.valtimoplugins.documentenapiwopi.client.WopiClient
 import com.ritense.plugin.PluginFactory
 import com.ritense.plugin.service.PluginService
-import com.ritense.valtimo.contract.annotation.SkipComponentScan
-import com.ritense.valtimoplugins.sampleplugin.client.SampleService
 import org.springframework.stereotype.Component
 
-/**
- * Factory class to create instances of the SamplePlugin.
- * This is required for the plugin framework to instantiate the plugin.
- */
-@SkipComponentScan
 @Component
-class SamplePluginFactory(
-    pluginService: PluginService,
-    val sampleService: SampleService,
-) : PluginFactory<SamplePlugin>(pluginService) {
-    override fun create(): SamplePlugin = SamplePlugin(sampleService)
+class DocumentenApiWopiPluginFactory(
+    private val wopiClient: WopiClient,
+    pluginService: PluginService) : PluginFactory<DocumentenApiWopiPlugin>(pluginService) {
+
+    override fun create(): DocumentenApiWopiPlugin {
+        return DocumentenApiWopiPlugin(wopiClient, pluginService)
+    }
 }

@@ -1,17 +1,17 @@
 {
-    "name": "sample-plugin",
+    "name": "documenten-api-wopi-plugin",
     "version": 1,
     "backend": [
         {
-            "import": "com.ritense.valtimoplugins:sample-plugin"
+            "import": "com.ritense.valtimoplugins:documenten-api-wopi-plugin"
         }
     ],
     "frontend": {
-        "import": "@valtimo-plugins/sample-plugin",
+        "import": "@valtimo-plugins/documenten-api-wopi-plugin",
         "codeAdditions": [
             {
-                "spec": "samplePluginSpecification",
-                "module": "SamplePluginModule"
+                "spec": "documentenApiWopiPluginSpecification",
+                "module": "DocumentenApiWopiPluginModule"
             }
         ]
     }

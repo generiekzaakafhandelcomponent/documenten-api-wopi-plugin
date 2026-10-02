@@ -23,13 +23,13 @@ pluginManager.withPlugin("maven-publish") {
                 version = pluginProperties.pluginVersion
 
                 pom {
-                    name = "Sample plugin module"
-                    description = "A module containing a sample plugin"
+                    name = 'Documenten API WOPI Plugin'
+                    description = 'The Documenten API WOPI plugin allows GZAC to communicate with the DRC (Document Registratie Component) using the Web application Open Platform Interface (WOPI). This enables users to view, edit and collaborate on documents stored in the DRC.'
                     developers {
                         developer {
-                            id = "team-valtimo"
-                            name = "Team Valtimo"
-                            email = "support@ritense.com"
+                            id = "baseflow"
+                            name = "Baseflow B.V."
+                            email = "help@baseflow.com"
                         }
                     }
                 }
