@@ -1,4 +1,9 @@
 ######################
+# Claude Code
+######################
+.claude/settings.local.json
+
+######################
 # Project Specific
 ######################
 /src/main/webapp/content/css/**

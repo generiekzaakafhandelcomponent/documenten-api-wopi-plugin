@@ -16,17 +16,25 @@
 
 package com.ritense.valtimoplugins.documentenapiwopi
 
-import com.ritense.valtimoplugins.documentenapiwopi.client.WopiClient
+import com.ritense.authorization.AuthorizationService
+import com.ritense.catalogiapi.service.CatalogiService
 import com.ritense.plugin.PluginFactory
 import com.ritense.plugin.service.PluginService
+import com.ritense.valtimoplugins.documentenapiwopi.client.WopiClient
 import org.springframework.stereotype.Component
 
 @Component
 class DocumentenApiWopiPluginFactory(
     private val wopiClient: WopiClient,
-    pluginService: PluginService) : PluginFactory<DocumentenApiWopiPlugin>(pluginService) {
-
-    override fun create(): DocumentenApiWopiPlugin {
-        return DocumentenApiWopiPlugin(wopiClient, pluginService)
-    }
+    private val authorizationService: AuthorizationService,
+    private val catalogiService: CatalogiService,
+    pluginService: PluginService,
+) : PluginFactory<DocumentenApiWopiPlugin>(pluginService) {
+    override fun create(): DocumentenApiWopiPlugin =
+        DocumentenApiWopiPlugin(
+            wopiClient,
+            authorizationService,
+            catalogiService,
+            pluginService,
+        )
 }

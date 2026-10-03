@@ -1,0 +1,4 @@
+services:
+  db:
+    ports:
+      - "${TEST_DB_PORT:-54342}:5432"

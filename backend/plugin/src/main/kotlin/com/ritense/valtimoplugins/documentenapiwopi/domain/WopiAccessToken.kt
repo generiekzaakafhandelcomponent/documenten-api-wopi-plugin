@@ -21,16 +21,15 @@ import com.fasterxml.jackson.annotation.JsonProperty
 /**
  * Represents the WOPI access token and expiration time that can be used to access the WOPI endpoints.
  */
-data class WopiAccessToken (
+data class WopiAccessToken(
     /**
      * The Short-lived access token that can be used to access the WOPI endpoints.
      */
     @JsonProperty("access_token")
     val accessToken: String,
-
     /**
      * The expiration time of the access token in seconds since the Unix epoch.
      */
     @JsonProperty("access_token_expires_at")
-    val expiresAt: Long
+    val expiresAt: Long,
 )

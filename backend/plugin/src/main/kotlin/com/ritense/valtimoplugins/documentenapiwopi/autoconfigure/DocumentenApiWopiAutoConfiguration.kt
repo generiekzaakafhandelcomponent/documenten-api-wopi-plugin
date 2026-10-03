@@ -16,12 +16,14 @@
 
 package com.ritense.valtimoplugins.documentenapiwopi.autoconfigure
 
-import com.ritense.valtimoplugins.documentenapiwopi.web.rest.DocumentenApiWopiResource
+import com.ritense.authorization.AuthorizationService
+import com.ritense.catalogiapi.service.CatalogiService
+import com.ritense.plugin.service.PluginService
 import com.ritense.valtimoplugins.documentenapiwopi.DocumentenApiWopiPluginFactory
 import com.ritense.valtimoplugins.documentenapiwopi.client.WopiClient
 import com.ritense.valtimoplugins.documentenapiwopi.security.DocumentenApiWopiHttpSecurityConfigurer
 import com.ritense.valtimoplugins.documentenapiwopi.service.DocumentenApiWopiService
-import com.ritense.plugin.service.PluginService
+import com.ritense.valtimoplugins.documentenapiwopi.web.rest.DocumentenApiWopiResource
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
@@ -32,45 +34,39 @@ import org.springframework.web.client.RestClient
 open class DocumentenApiWopiAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(WopiClient::class)
-    fun wopiClient(
-        restClientBuilder: RestClient.Builder,
-    ) = WopiClient(restClientBuilder)
+    fun wopiClient(restClientBuilder: RestClient.Builder) = WopiClient(restClientBuilder)
 
     @Bean
     @ConditionalOnMissingBean(DocumentenApiWopiPluginFactory::class)
     fun documentenApiWopiPluginFactory(
         wopiClient: WopiClient,
-        pluginService: PluginService
-    ): DocumentenApiWopiPluginFactory {
-        return DocumentenApiWopiPluginFactory(
+        authorizationService: AuthorizationService,
+        catalogiService: CatalogiService,
+        pluginService: PluginService,
+    ): DocumentenApiWopiPluginFactory =
+        DocumentenApiWopiPluginFactory(
             wopiClient,
+            authorizationService,
+            catalogiService,
             pluginService,
         )
-    }
 
     @Bean
     @ConditionalOnMissingBean(DocumentenApiWopiService::class)
-    fun documentenWopiApiService(
-        pluginService: PluginService,
-    ): DocumentenApiWopiService {
-        return DocumentenApiWopiService(
-            pluginService
+    fun documentenWopiApiService(pluginService: PluginService): DocumentenApiWopiService =
+        DocumentenApiWopiService(
+            pluginService,
         )
-    }
 
     @Bean
     @ConditionalOnMissingBean(DocumentenApiWopiResource::class)
-    fun documentenApiWopiResource(
-        documentenApiWopiService: DocumentenApiWopiService,
-    ): DocumentenApiWopiResource {
-        return DocumentenApiWopiResource(
-            documentenApiWopiService
+    fun documentenApiWopiResource(documentenApiWopiService: DocumentenApiWopiService): DocumentenApiWopiResource =
+        DocumentenApiWopiResource(
+            documentenApiWopiService,
         )
-    }
 
     @Order(380)
     @Bean
-    fun documentenApiWopiHttpSecurityConfigurer(): DocumentenApiWopiHttpSecurityConfigurer {
-        return DocumentenApiWopiHttpSecurityConfigurer()
-    }
+    fun documentenApiWopiHttpSecurityConfigurer(): DocumentenApiWopiHttpSecurityConfigurer =
+        DocumentenApiWopiHttpSecurityConfigurer()
 }

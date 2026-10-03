@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package com.ritense.valtimoplugins.sampleplugin
+package com.ritense.valtimoplugins.documentenapiwopi
 
+import com.ritense.authorization.AuthorizationService
+import com.ritense.catalogiapi.service.CatalogiService
+import com.ritense.catalogiapi.service.ZaaktypeUrlProvider
+import com.ritense.plugin.repository.PluginConfigurationRepository
+import com.ritense.plugin.service.PluginService
 import com.ritense.testutilscommon.junit.extension.LiquibaseRunnerExtension
 import com.ritense.valtimo.contract.authentication.UserManagementService
 import com.ritense.valtimo.contract.mail.MailSender
+import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.bean.override.mockito.MockitoBean
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @SpringBootTest
@@ -34,4 +41,24 @@ abstract class BaseIntegrationTest : BaseTest() {
 
     @MockitoBean
     lateinit var mailSender: MailSender
+
+    @MockitoBean
+    lateinit var authorizationService: AuthorizationService
+
+    @MockitoBean
+    lateinit var catalogiService: CatalogiService
+
+    @MockitoBean
+    lateinit var zaaktypeUrlProvider: ZaaktypeUrlProvider
+
+    @MockitoSpyBean
+    lateinit var pluginService: PluginService
+
+    @MockitoSpyBean
+    lateinit var pluginConfigurationRepository: PluginConfigurationRepository
+
+    fun mockResponse(body: String): MockResponse =
+        MockResponse()
+            .addHeader("Content-Type", "application/json")
+            .setBody(body)
 }

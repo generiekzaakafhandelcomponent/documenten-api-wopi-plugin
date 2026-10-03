@@ -32,7 +32,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 @JsonIgnoreProperties("proof-key")
 data class WopiDiscovery(
     @param:JacksonXmlProperty(localName = "net-zone")
-    val netZone: NetZone)
+    val netZone: NetZone,
+)
 
 /**
  * Represents a network zone within the WOPI discovery configuration, which defines the network
@@ -43,13 +44,20 @@ data class NetZone(
     val name: String,
     @param:JacksonXmlElementWrapper(useWrapping = false)
     @param:JacksonXmlProperty(localName = "app")
-    val apps: List<App>)
+    val apps: List<App>,
+)
 
 /**
  * Represents an application within a network zone, which defines the application name, actions,
  * and optional favicon URL.
  */
-@JsonIgnoreProperties("bootstrapperUrl", "appBootstrapperUrl", "applicationBaseUrl", "staticResourceOrigin", "checkLicense")
+@JsonIgnoreProperties(
+    "bootstrapperUrl",
+    "appBootstrapperUrl",
+    "applicationBaseUrl",
+    "staticResourceOrigin",
+    "checkLicense",
+)
 data class App(
     @param:JacksonXmlProperty(isAttribute = true, localName = "name")
     val name: String,
@@ -57,7 +65,8 @@ data class App(
     @param:JacksonXmlProperty(localName = "action")
     val actions: List<Action>? = emptyList(),
     @param:JacksonXmlProperty(isAttribute = true, localName = "favIconUrl")
-    val favIconUrl: String?)
+    val favIconUrl: String?,
+)
 
 /**
  * Represents an action within an application, which defines the action name, URL source, default
@@ -71,4 +80,5 @@ data class Action(
     @param:JacksonXmlProperty(isAttribute = true, localName = "default")
     val default: Boolean = false,
     @param:JacksonXmlProperty(isAttribute = true, localName = "ext")
-    val ext: String?)
+    val ext: String?,
+)
