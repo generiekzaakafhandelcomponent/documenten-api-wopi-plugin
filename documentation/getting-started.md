@@ -10,11 +10,7 @@
 
 All commands below should be run from the **project root** directory.
 
-### 1. Configure environment
-
-Copy `.env.properties.example` to `.env.properties` and fill in the required values.
-
-### 2. Start Docker dependencies
+### 1. Start Docker dependencies
 
 Make sure Docker is running, then start the required services:
 
@@ -22,13 +18,13 @@ Make sure Docker is running, then start the required services:
 ./gradlew :backend:app:composeUp
 ```
 
-### 3. Start the backend
+### 2. Start the backend
 
 ```shell
 ./gradlew :backend:app:bootRun
 ```
 
-### 4. Start the frontend
+### 3. Start the frontend
 
 ```shell
 cd frontend

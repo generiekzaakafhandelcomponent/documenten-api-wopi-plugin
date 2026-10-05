@@ -158,23 +158,25 @@ class DocumentenApiWopiPluginTest {
         stubGrantedWopiFlow(
             discovery =
                 WopiDiscovery(
-                    NetZone(
-                        name = "https",
-                        apps =
-                            listOf(
-                                App(
-                                    name = "Generic",
-                                    actions =
-                                        listOf(
-                                            Action(
-                                                name = "edit",
-                                                urlSrc = "https://generic.example.com/edit",
-                                                ext = null,
+                    listOf(
+                        NetZone(
+                            name = "https",
+                            apps =
+                                listOf(
+                                    App(
+                                        name = "Generic",
+                                        actions =
+                                            listOf(
+                                                Action(
+                                                    name = "edit",
+                                                    urlSrc = "https://generic.example.com/edit",
+                                                    ext = null,
+                                                ),
                                             ),
-                                        ),
-                                    favIconUrl = null,
+                                        favIconUrl = null,
+                                    ),
                                 ),
-                            ),
+                        ),
                     ),
                 ),
         )
@@ -182,6 +184,93 @@ class DocumentenApiWopiPluginTest {
         assertFailsWith<WopiEditActionNotFoundException> {
             plugin.getWopiHostPageUrl(DOCUMENT_ID, caseDocumentId)
         }
+    }
+
+    @Test
+    fun `should fail when the document's filename has no dot even if discovery has an extensionless edit action`() {
+        // Unlike a null bestandsnaam (covered above), a dotless filename like "README" makes substringAfterLast
+        // return "" rather than null - this must still be treated as "no extension", not matched against an
+        // extensionless discovery action.
+        val plugin = pluginWithDocument(bestandsnaam = "README")
+        stubGrantedWopiFlow(
+            discovery =
+                WopiDiscovery(
+                    listOf(
+                        NetZone(
+                            name = "https",
+                            apps =
+                                listOf(
+                                    App(
+                                        name = "Generic",
+                                        actions =
+                                            listOf(
+                                                Action(
+                                                    name = "edit",
+                                                    urlSrc = "https://generic.example.com/edit",
+                                                    ext = null,
+                                                ),
+                                            ),
+                                        favIconUrl = null,
+                                    ),
+                                ),
+                        ),
+                    ),
+                ),
+        )
+
+        assertFailsWith<WopiEditActionNotFoundException> {
+            plugin.getWopiHostPageUrl(DOCUMENT_ID, caseDocumentId)
+        }
+    }
+
+    @Test
+    fun `should select the edit action from the second net zone when the first has no match`() {
+        val plugin = pluginWithDocument(bestandsnaam = "report.docx")
+        stubGrantedWopiFlow(
+            discovery =
+                WopiDiscovery(
+                    listOf(
+                        NetZone(
+                            name = "internal-https",
+                            apps =
+                                listOf(
+                                    App(
+                                        name = "Excel",
+                                        actions =
+                                            listOf(
+                                                Action(
+                                                    name = "edit",
+                                                    urlSrc = "https://internal.example.com/edit",
+                                                    ext = "xlsx",
+                                                ),
+                                            ),
+                                        favIconUrl = null,
+                                    ),
+                                ),
+                        ),
+                        NetZone(
+                            name = "external-https",
+                            apps =
+                                listOf(
+                                    App(
+                                        name = "Word",
+                                        actions =
+                                            listOf(
+                                                Action(name = "edit", urlSrc = WORD_EDIT_URL, ext = "docx"),
+                                            ),
+                                        favIconUrl = null,
+                                    ),
+                                ),
+                        ),
+                    ),
+                ),
+        )
+        whenever(wopiClient.buildWopiHostPageUrl(wopiHostBaseUrl, URI(WORD_EDIT_URL), DOCUMENT_ID, wopiAccessToken))
+            .thenReturn(URI(EXPECTED_HOST_PAGE_URL))
+
+        val url: URI = plugin.getWopiHostPageUrl(DOCUMENT_ID, caseDocumentId)
+
+        assertEquals(URI(EXPECTED_HOST_PAGE_URL), url)
     }
 
     @Test
@@ -245,44 +334,46 @@ class DocumentenApiWopiPluginTest {
         // where a single browser URL is shared across all actions).
         private val wopiDiscovery: WopiDiscovery =
             WopiDiscovery(
-                NetZone(
-                    name = "https",
-                    apps =
-                        listOf(
-                            App(
-                                name = "Word",
-                                actions =
-                                    listOf(
-                                        Action(
-                                            name = "view",
-                                            urlSrc = "https://word.example.com/view",
-                                            default = true,
-                                            ext = "docx",
+                listOf(
+                    NetZone(
+                        name = "https",
+                        apps =
+                            listOf(
+                                App(
+                                    name = "Word",
+                                    actions =
+                                        listOf(
+                                            Action(
+                                                name = "view",
+                                                urlSrc = "https://word.example.com/view",
+                                                default = true,
+                                                ext = "docx",
+                                            ),
+                                            Action(name = "edit", urlSrc = WORD_EDIT_URL, default = true, ext = "docx"),
                                         ),
-                                        Action(name = "edit", urlSrc = WORD_EDIT_URL, default = true, ext = "docx"),
-                                    ),
-                                favIconUrl = null,
+                                    favIconUrl = null,
+                                ),
+                                App(
+                                    name = "Excel",
+                                    actions =
+                                        listOf(
+                                            Action(
+                                                name = "view",
+                                                urlSrc = "https://excel.example.com/view",
+                                                default = true,
+                                                ext = "xlsx",
+                                            ),
+                                            Action(
+                                                name = "edit",
+                                                urlSrc = "https://excel.example.com/edit",
+                                                default = true,
+                                                ext = "xlsx",
+                                            ),
+                                        ),
+                                    favIconUrl = null,
+                                ),
                             ),
-                            App(
-                                name = "Excel",
-                                actions =
-                                    listOf(
-                                        Action(
-                                            name = "view",
-                                            urlSrc = "https://excel.example.com/view",
-                                            default = true,
-                                            ext = "xlsx",
-                                        ),
-                                        Action(
-                                            name = "edit",
-                                            urlSrc = "https://excel.example.com/edit",
-                                            default = true,
-                                            ext = "xlsx",
-                                        ),
-                                    ),
-                                favIconUrl = null,
-                            ),
-                        ),
+                    ),
                 ),
             )
     }

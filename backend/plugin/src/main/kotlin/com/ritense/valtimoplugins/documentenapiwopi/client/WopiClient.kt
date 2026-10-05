@@ -25,6 +25,7 @@ import org.springframework.http.converter.ResourceHttpMessageConverter
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
+import org.springframework.web.util.UriBuilder
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 import java.time.Duration
@@ -85,13 +86,8 @@ class WopiClient(
         checkNotNull(
             restClient(documentenApiAuthentication)
                 .post()
-                .uri {
-                    // replacePath drops baseUrl's own path (e.g. /documenten/); the WOPI extension is mounted at the host root
-                    ClientTools
-                        .baseUrlToBuilder(it, baseUrl)
-                        .replacePath("/wopi/api/v1/token/$documentId")
-                        .build()
-                }.retrieve()
+                .uri { wopiUriBuilder(it, baseUrl, "/wopi/api/v1/token/$documentId").build() }
+                .retrieve()
                 .body<WopiAccessToken>(),
         ) { "WOPI access token response for document '$documentId' was empty" }
 
@@ -105,15 +101,18 @@ class WopiClient(
         wopiClientUrl: URI,
         documentId: String,
         wopiAccessToken: WopiAccessToken,
-    ): URI {
-        // replacePath drops baseUrl's own path (e.g. /documenten/); the WOPI extension is mounted at the host root
-        return ClientTools
-            .baseUrlToBuilder(UriComponentsBuilder.newInstance(), baseUrl)
-            .replacePath("/wopi/files/$documentId")
+    ): URI =
+        wopiUriBuilder(UriComponentsBuilder.newInstance(), baseUrl, "/wopi/files/$documentId")
             .queryParam("access_token", wopiAccessToken.accessToken)
             .queryParam("wopiClient", wopiClientUrl.toString())
             .build()
-    }
+
+    // replacePath drops baseUrl's own path (e.g. /documenten/); the WOPI extension is mounted at the host root.
+    private fun wopiUriBuilder(
+        builder: UriBuilder,
+        baseUrl: URI,
+        path: String,
+    ): UriBuilder = ClientTools.baseUrlToBuilder(builder, baseUrl).replacePath(path)
 
     private fun restClient(authentication: DocumentenApiAuthentication? = null): RestClient =
         restClientBuilder

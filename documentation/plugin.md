@@ -9,8 +9,7 @@ To use the "Documenten API WOPI plugin" the following requirements must be met:
 
 * The "Documenten API WOPI plugin" depends on version 1.1.0 of the [CG-DMF component][1].
   An open source implementation of the VNG Documenten API (version 1.5.0).
-* The "Documenten API plugin" must be configured. More details on configuring the "Documenten API plugin" can be found
-  in the [Documenten API plugin configuration guide](./configure-documenten-api-plugin.md).
+* The "Documenten API plugin" must be configured via the GZAC plugin management UI before this plugin can be used.
 * An online document editing suite that supports the WOPI protocol, such as [Collabora Online][2] or [OnlyOffice][3].
 
 ## Configure the plugin
@@ -56,23 +55,14 @@ A complete list of MIME types for Microsoft Office documents can be found [here]
 
 ## Starting the preconfigured backend in a development environment
 
-Valtimo comes with a preconfigured [docker-compose.yaml](../../../backend/apps/dev/docker-compose.yaml) file that will
-pull in all the required images to run Valtimo and the CG-DMF DRC. These images are not run by default but are
-configured to be run when the `cg-dmf` profile is used.
-
-Before starting the development environment, you do have to manually update the `VALTIMO_DOCUMENTEN_API_URL` in the
-[.env.properties](../../../backend/apps/dev/.env.properties) file so it points to the CG-DMF DRC. The correct
-configuration should look like this:
-
-```properties
-VALTIMO_DOCUMENTEN_API_URL=http://cg-dmf.localhost:8083/documenten/api/v1/
-```
-
-Now you are ready to start the development environment, simply run the following command from the root of the Valtimo
-repository:
+This repository comes with a preconfigured [docker-compose.yml](../backend/app/docker-compose.yml) file that pulls in
+all the required images to run Valtimo and the CG-DMF DRC, including Collabora as the WOPI client. The "Documenten API
+plugin" configuration is preconfigured to point at the CG-DMF DRC, so no manual setup is required - simply follow the
+same steps as in [Getting Started](./getting-started.md):
 
 ```bash
-./gradlew :backend:apps:dev:bootRunWithDocker -Pcg-dmf
+./gradlew :backend:app:composeUp
+./gradlew :backend:app:bootRun
 ```
 
 [1]: https://github.com/Baseflow/cg-dmf-poc/?tab=readme-ov-file

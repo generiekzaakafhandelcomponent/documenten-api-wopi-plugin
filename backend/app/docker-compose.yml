@@ -519,14 +519,13 @@ services:
       - openklant
 
   # CG-DMF (DRC implementation by Baseflow) - only needed to test the WOPI plugin.
-  # Also point VALTIMO_DOCUMENTEN_API_URL at cg-dmf instead of OpenZaak - see .env.properties.
   cg-dmf:
     image: baseflow/cg-dmf-poc:1.1.1
     restart: unless-stopped
     depends_on:
       cg-dmf-database:
         condition: service_healthy
-      gzac-keycloak:
+      plugin-keycloak:
         condition: service_healthy
     ports:
       - "8083:8080"

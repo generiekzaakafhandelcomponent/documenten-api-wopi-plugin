@@ -26,7 +26,7 @@ import com.ritense.documentenapi.client.DocumentInformatieObject
 import com.ritense.plugin.domain.PluginConfiguration
 import com.ritense.plugin.domain.PluginConfigurationId
 import com.ritense.valtimoplugins.documentenapiwopi.BaseIntegrationTest
-import okhttp3.mockwebserver.MockResponse
+import com.ritense.valtimoplugins.documentenapiwopi.discoveryResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
@@ -128,22 +128,7 @@ internal class DocumentenApiWopiResourceIT : BaseIntegrationTest() {
         whenever(mockDocumentenApiPlugin.getInformatieObject(any<String>(), any())).thenReturn(documentInformatieObject)
 
         mockWebServer.enqueue(mockResponse("""{"access_token": "test", "access_token_expires_at": 1234567890}"""))
-        mockWebServer.enqueue(
-            MockResponse()
-                .addHeader("Content-Type", "application/xml")
-                .setBody(
-                    """
-                    <?xml version="1.0" encoding="utf-8"?>
-                    <wopi-discovery>
-                        <net-zone name="external-https">
-                            <app name="Word" favIconUrl="https://example.com/word.ico">
-                                <action name="edit" ext="docx" default="true" urlsrc="https://example.com/wopi/action"/>
-                            </app>
-                        </net-zone>
-                    </wopi-discovery>
-                    """.trimIndent(),
-                ),
-        )
+        mockWebServer.enqueue(discoveryResponse())
         mockMvc
             .perform(
                 get(
@@ -183,22 +168,7 @@ internal class DocumentenApiWopiResourceIT : BaseIntegrationTest() {
         whenever(mockDocumentenApiPlugin.getInformatieObject(any<String>(), any())).thenReturn(documentInformatieObject)
 
         mockWebServer.enqueue(mockResponse("""{"access_token": "test", "access_token_expires_at": 1234567890}"""))
-        mockWebServer.enqueue(
-            MockResponse()
-                .addHeader("Content-Type", "application/xml")
-                .setBody(
-                    """
-                    <?xml version="1.0" encoding="utf-8"?>
-                    <wopi-discovery>
-                        <net-zone name="external-https">
-                            <app name="Word" favIconUrl="https://example.com/word.ico">
-                                <action name="edit" ext="docx" default="true" urlsrc="https://example.com/wopi/action"/>
-                            </app>
-                        </net-zone>
-                    </wopi-discovery>
-                    """.trimIndent(),
-                ),
-        )
+        mockWebServer.enqueue(discoveryResponse())
         mockMvc
             .perform(
                 get(

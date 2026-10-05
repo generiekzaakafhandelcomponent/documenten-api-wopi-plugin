@@ -16,7 +16,8 @@
 
 package com.ritense.valtimoplugins.documentenapiwopi.client
 
-import okhttp3.mockwebserver.MockResponse
+import com.ritense.valtimoplugins.documentenapiwopi.discoveryResponse
+import com.ritense.valtimoplugins.documentenapiwopi.multiZoneDiscoveryResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -53,19 +54,15 @@ internal class WopiClientTest {
         assertEquals(1, mockWebServer.requestCount)
     }
 
-    private fun discoveryResponse() =
-        MockResponse()
-            .addHeader("Content-Type", "application/xml")
-            .setBody(
-                """
-                <?xml version="1.0" encoding="utf-8"?>
-                <wopi-discovery>
-                    <net-zone name="external-https">
-                        <app name="Word" favIconUrl="https://example.com/word.ico">
-                            <action name="edit" ext="docx" default="true" urlsrc="https://example.com/wopi/action"/>
-                        </app>
-                    </net-zone>
-                </wopi-discovery>
-                """.trimIndent(),
-            )
+    @Test
+    fun `should deserialize every net-zone when discovery has multiple`() {
+        mockWebServer.enqueue(multiZoneDiscoveryResponse())
+
+        val discoveryUrl = mockWebServer.url("/hosting/discovery").let { java.net.URI(it.toString()) }
+
+        val discovery = wopiClient.getWopiDiscovery(discoveryUrl)
+
+        // Jackson must keep both sibling <net-zone> elements, not silently overwrite with only the last one parsed.
+        assertEquals(listOf("internal-https", "external-https"), discovery.netZones.map { it.name })
+    }
 }

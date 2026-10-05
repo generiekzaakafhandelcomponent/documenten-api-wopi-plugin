@@ -31,8 +31,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 @JacksonXmlRootElement(localName = "wopi-discovery")
 @JsonIgnoreProperties("proof-key")
 data class WopiDiscovery(
+    // MS-WOPI allows up to 4 sibling <net-zone> elements (e.g. internal-https/external-https); a singular field here
+    // would have Jackson silently keep only the last one parsed instead of searching all of them for a match.
+    @param:JacksonXmlElementWrapper(useWrapping = false)
     @param:JacksonXmlProperty(localName = "net-zone")
-    val netZone: NetZone,
+    val netZones: List<NetZone>,
 )
 
 /**

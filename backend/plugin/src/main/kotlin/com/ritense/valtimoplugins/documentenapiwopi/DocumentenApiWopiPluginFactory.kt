@@ -20,10 +20,12 @@ import com.ritense.authorization.AuthorizationService
 import com.ritense.catalogiapi.service.CatalogiService
 import com.ritense.plugin.PluginFactory
 import com.ritense.plugin.service.PluginService
+import com.ritense.valtimo.contract.annotation.SkipComponentScan
 import com.ritense.valtimoplugins.documentenapiwopi.client.WopiClient
 import org.springframework.stereotype.Component
 
 @Component
+@SkipComponentScan
 class DocumentenApiWopiPluginFactory(
     private val wopiClient: WopiClient,
     private val authorizationService: AuthorizationService,

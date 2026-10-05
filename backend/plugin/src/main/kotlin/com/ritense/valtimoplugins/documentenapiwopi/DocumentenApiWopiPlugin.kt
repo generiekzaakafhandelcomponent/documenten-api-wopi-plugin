@@ -92,7 +92,14 @@ class DocumentenApiWopiPlugin(
             ),
         )
 
-        val extension = documentInformatieObject.bestandsnaam?.substringAfterLast('.', "")?.lowercase()
+        // A dotless filename (e.g. "README") must be treated the same as a missing filename - substringAfterLast's
+        // missingDelimiterValue of "" would otherwise be a non-null extension that could coincidentally match a
+        // discovery action which also has no `ext` attribute.
+        val extension =
+            documentInformatieObject.bestandsnaam
+                ?.substringAfterLast('.', "")
+                ?.takeIf { it.isNotEmpty() }
+                ?.lowercase()
 
         val documentenApiAuthentication = documentenApiPlugin.authenticationPluginConfiguration
         val slatToken: WopiAccessToken =
@@ -148,7 +155,8 @@ fun WopiDiscovery.editActionUrl(extension: String?): URI {
     // open the wrong editor.
     val actionUrl =
         extension?.let { ext ->
-            netZone.apps
+            netZones
+                .flatMap { it.apps }
                 .flatMap { it.actions.orEmpty() }
                 .firstOrNull { it.name == "edit" && it.ext.equals(ext, ignoreCase = true) }
                 ?.urlSrc
