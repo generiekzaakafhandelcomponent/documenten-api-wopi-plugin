@@ -30,8 +30,7 @@ val configureEnvironment = extra["configureEnvironment"] as (task: ProcessForkOp
 
 dockerCompose {
     setProjectName("gzac-docker-compose")
-    composeAdditionalArgs.addAll("--profile", "zgw")
-    // composeAdditionalArgs = ["--profile", "zgw", "--profile", "openformulieren", "--profile", "openklant"]
+    composeAdditionalArgs.addAll("--profile", "zgw", "--profile", "cg-dmf")
     stopContainers = false
     removeContainers = false
     removeVolumes = false

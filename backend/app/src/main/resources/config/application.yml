@@ -1,6 +1,6 @@
 spring:
   application:
-    name: gzac-plugin-template
+    name: gzac-documenten-api-wopi-plugin
   profiles:
     active: dev
   jackson:

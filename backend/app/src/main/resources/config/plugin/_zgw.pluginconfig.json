@@ -31,10 +31,10 @@
         "title": "Documenten API (Autodeployed)",
         "pluginDefinitionKey": "documentenapi",
         "properties": {
-            "url": "http://localhost:8001/documenten/api/v1/",
+            "url": "http://cg-dmf.localhost:8083/documenten/api/v1/",
             "bronorganisatie": "051845623",
             "authenticationPluginConfiguration": "b609a0a3-886e-4b3d-ae0d-c01effb311ee",
-            "apiVersion": "1.4.2-maykin-1.13.0"
+            "apiVersion": "1.5.0"
         }
     },
     {

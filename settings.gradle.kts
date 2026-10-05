@@ -1,4 +1,4 @@
-rootProject.name = "gzac-plugin-template"
+rootProject.name = "gzac-documenten-api-wopi-plugin"
 include(
     "backend",
     "backend:app",

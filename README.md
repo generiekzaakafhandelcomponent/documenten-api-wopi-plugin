@@ -1,21 +1,35 @@
-# GZAC Plugin Template
+# GZAC Documenten API WOPI plugin
 
-Een template-repository om je eigen GZAC-plugins te bouwen. Kopieer dit project voor een kant-en-klare structuur met
-build-configuratie, CI/CD-workflows en een werkend voorbeeld om vanuit te starten.
+De Documenten API WOPI plugin kan in samenwerking met de Documenten API plugin worden gebruikt voor het openen en 
+bewerken van documenten in de web-browser.
 
-## Aan de slag
+## Running the application
 
-1. Kopieer of fork deze repository
-2. Geef het sample-plugin-package, de module en de configuratie een naam die past bij jouw plugin
-3. Volg de handleiding [Aan de slag](documentation/getting-started.md) voor installatie- en ontwikkelinstructies
+This repository includes a preconfigured development environment (Valtimo, the CG-DMF DRC and Collabora Online as the
+WOPI client) so the plugin can be tested without any manual setup.
 
-## Documentatie
+Prerequisites: Java 21, Node.js >= 20, Docker & Docker Compose.
 
-- [Aan de slag](documentation/getting-started.md) — installatie- en ontwikkelinstructies
-- [Voorbeeldapplicatie](documentation/example-application.md) — de voorbeeldapplicatie lokaal draaien
-- [Sample plugin](documentation/plugin.md) — referentie-implementatie die in deze template is opgenomen
-- [Release notes](documentation/release-notes.md) — versiegeschiedenis en wijzigingen
+```shell
+./gradlew :backend:app:composeUp
+./gradlew :backend:app:bootRun
+```
+
+Then, in a separate terminal, start the frontend:
+
+```shell
+cd frontend
+npm install
+npm run libs-build-all
+npm start
+```
+
+Log in at the frontend with one of the preconfigured test users (e.g. `user` / `user`), open a case with a document,
+and use the "Documenten API WOPI plugin" action to open it for editing in Collabora Online.
+
+See [documentation/getting-started.md](documentation/getting-started.md) and
+[documentation/plugin.md](documentation/plugin.md) for more details.
 
 ## Contact
 
--- naam contactpersoon (bedrijfsnaam)
+-- Maurits van Beusekom ([Baseflow](https://baseflow.com))
