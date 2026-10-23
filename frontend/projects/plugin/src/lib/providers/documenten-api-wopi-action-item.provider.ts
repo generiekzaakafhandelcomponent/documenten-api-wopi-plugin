@@ -18,28 +18,44 @@ import {ActionItem} from '@valtimo/components';
 import {ConfigService} from '@valtimo/shared';
 import {DocumentenApiRelatedFile} from '@valtimo/zgw';
 import {combineLatest, Observable, of} from 'rxjs';
-import {catchError, map, shareReplay, take} from 'rxjs/operators';
+import {catchError, map, retry, shareReplay, take} from 'rxjs/operators';
 import {DocumentenApiWopiService} from '../services';
+
+// A confirmed "unsupported" response (the Documenten API genuinely has no WOPI plugin configured)
+// must stay distinct from a failed check (network error, backend down, ...): collapsing both into
+// one boolean would silently hide "Edit content" on a transient failure, with no way for an
+// already-rendered row to recover other than an unrelated table refetch.
+type WopiSupportStatus = 'supported' | 'unsupported' | 'error';
+
+const CHECK_RETRY_COUNT = 3;
+const CHECK_RETRY_DELAY_MS = 2000;
 
 // The document list of a case (zaak) can contain documents from different Documenten APIs, so
 // checking if WOPI editing is supported needs to be done per each file's pluginConfigurationId -
 // this cache just makes sure that, for a given configId, the "is WOPI supported" HTTP check fires
 // once and is shared by every row (and by both the disabled$ and hidden$ callbacks) instead of
 // once per row per callback.
-function createHasWopiSupport$(
+function createWopiSupportStatus$(
   wopiService: DocumentenApiWopiService
-): (pluginConfigurationId: string) => Observable<boolean> {
-  const cache = new Map<string, Observable<boolean>>();
+): (pluginConfigurationId: string) => Observable<WopiSupportStatus> {
+  const cache = new Map<string, Observable<WopiSupportStatus>>();
 
-  return (pluginConfigurationId: string): Observable<boolean> => {
+  return (pluginConfigurationId: string): Observable<WopiSupportStatus> => {
     if (!cache.has(pluginConfigurationId)) {
       cache.set(
         pluginConfigurationId,
         wopiService.checkWopiSupport(pluginConfigurationId).pipe(
+          map((supported): WopiSupportStatus => (supported ? 'supported' : 'unsupported')),
+          // Retry transient failures a few times before giving up, so a brief blip resolves
+          // silently for rows that are already subscribed instead of immediately reading as
+          // "unsupported".
+          retry({count: CHECK_RETRY_COUNT, delay: CHECK_RETRY_DELAY_MS}),
           catchError(() => {
-            // Don't cache failures as "unsupported" - evict so the next call retries the request.
+            // Don't cache a failure as "unsupported" - evict so a later row render (e.g. once the
+            // backend recovers) checks again instead of permanently treating this Documenten API
+            // as having no WOPI plugin configured.
             cache.delete(pluginConfigurationId);
-            return of(false);
+            return of<WopiSupportStatus>('error');
           }),
           shareReplay(1)
         )
@@ -73,17 +89,22 @@ export function createDocumentenApiWopiActionItem(
   configService: ConfigService,
   router: Router
 ): ActionItem {
-  const hasWopiSupport$ = createHasWopiSupport$(wopiService);
+  const wopiSupportStatus$ = createWopiSupportStatus$(wopiService);
 
   return {
     label: 'documentenApiWopi.editContent',
     type: 'normal',
+    // Only hide on a confirmed "unsupported" response. On 'error' the item stays visible (and, if
+    // the user is otherwise allowed to modify the document, enabled) so the user has a way to
+    // retry: clicking it attempts the real WOPI call below, which is its own, immediate signal of
+    // whether it actually works.
     hidden$: (file: DocumentenApiRelatedFile) =>
-      hasWopiSupport$(file?.pluginConfigurationId).pipe(map(supported => !supported)),
+      wopiSupportStatus$(file?.pluginConfigurationId).pipe(map(status => status === 'unsupported')),
     disabled$: (file: DocumentenApiRelatedFile) =>
-      combineLatest([hasWopiSupport$(file?.pluginConfigurationId), isModifiable$(configService, file)]).pipe(
-        map(([supported, modifiable]) => !supported || !modifiable)
-      ),
+      combineLatest([
+        wopiSupportStatus$(file?.pluginConfigurationId),
+        isModifiable$(configService, file),
+      ]).pipe(map(([status, modifiable]) => status === 'unsupported' || !modifiable)),
     callback: (file: DocumentenApiRelatedFile) => {
       const caseDocumentId = getCurrentCaseDocumentId(router);
       if (!caseDocumentId) {
