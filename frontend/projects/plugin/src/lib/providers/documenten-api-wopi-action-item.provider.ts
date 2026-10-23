@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {ActionItem} from '@valtimo/components';
 import {ConfigService} from '@valtimo/shared';
 import {DocumentenApiRelatedFile} from '@valtimo/zgw';
-import {combineLatest, Observable, of} from 'rxjs';
+import {combineLatest, Observable, of, throwError} from 'rxjs';
 import {catchError, map, retry, shareReplay, take} from 'rxjs/operators';
 import {DocumentenApiWopiService} from '../services';
 
@@ -46,6 +47,12 @@ function createWopiSupportStatus$(
         pluginConfigurationId,
         wopiService.checkWopiSupport(pluginConfigurationId).pipe(
           map((supported): WopiSupportStatus => (supported ? 'supported' : 'unsupported')),
+          // A 404 means the documenten-api-wopi plugin isn't installed on this Valtimo instance at
+          // all, which is itself a confirmed "no WOPI available" - not a transient failure, so it
+          // shouldn't go through the retry path below.
+          catchError((error: HttpErrorResponse) =>
+            error.status === 404 ? of<WopiSupportStatus>('unsupported') : throwError(() => error)
+          ),
           // Retry transient failures a few times before giving up, so a brief blip resolves
           // silently for rows that are already subscribed instead of immediately reading as
           // "unsupported".
