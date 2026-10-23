@@ -22,3 +22,4 @@ export * from "./lib/models";
 export * from "./lib/documenten-api-wopi-plugin.module";
 export * from "./lib/documenten-api-wopi-plugin.specification";
 export * from "./lib/components/documenten-api-wopi-configuration/documenten-api-wopi-configuration.component";
+export * from "./lib/services";
