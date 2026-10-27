@@ -1,8 +1,6 @@
 # Code owners for documenten-api-wopi-plugin
 #
-# Every change to this repository requires review from a code owner.
-# This list mirrors the repository's admins, so that write-access
-# collaborators (including outside collaborators) cannot be the sole
-# approver on a pull request.
+# GitHub automatically requests a review from the code owners on every
+# pull request. Only one reviewer is listed to avoid notifying every admin.
 
-*  @DevOps-Infra-Ritense @EmmaBorkentRitense @Hildebrand-Ritense @Klaas-Ritense @MaxStrikkersRitense @ThomasMinkeRitense @erik-ritense @klaasjan-ritense @paul-ritense @pvdmritense @rutger-h @ryanritense @sjorsholtrop-ritense @theo-ritense @vincentohr-ritense
+*  @Klaas-Ritense
