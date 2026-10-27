@@ -66,6 +66,7 @@
         "@valtimo/task",
         "@valtimo/user-interface",
         "@valtimo/user-management",
+        "@valtimo/zgw",
         "@webcomponents/custom-elements",
         "bootstrap",
         "bpmn-js",

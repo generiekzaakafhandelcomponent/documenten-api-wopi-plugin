@@ -16,13 +16,39 @@
 
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 import {DocumentenApiWopiConfigurationComponent} from './components/documenten-api-wopi-configuration/documenten-api-wopi-configuration.component';
 import {PluginTranslatePipeModule} from '@valtimo/plugin';
 import {FormModule, InputModule, SelectModule} from '@valtimo/components';
+import {ConfigService} from '@valtimo/shared';
+import {DOCUMENT_ACTION_ITEM} from '@valtimo/zgw';
+import {createDocumentenApiWopiActionItem} from './providers/documenten-api-wopi-action-item.provider';
+import {DocumentenApiWopiService} from './services';
 
 @NgModule({
   declarations: [DocumentenApiWopiConfigurationComponent],
   imports: [CommonModule, PluginTranslatePipeModule, FormModule, InputModule, SelectModule],
   exports: [DocumentenApiWopiConfigurationComponent],
+  providers: [
+    {
+      provide: DOCUMENT_ACTION_ITEM,
+      useFactory: createDocumentenApiWopiActionItem,
+      deps: [DocumentenApiWopiService, ConfigService, Router],
+      multi: true,
+    },
+  ],
 })
-export class DocumentenApiWopiPluginModule {}
+export class DocumentenApiWopiPluginModule {
+  constructor(private readonly translateService: TranslateService) {
+    // The case document list renders this plugin's action item through the standard `translate`
+    // pipe, so its label needs to live in the global catalog rather than this plugin's own
+    // pluginTranslations (which only back the plugin-configuration screen).
+    this.translateService.setTranslation('en', {documentenApiWopi: {editContent: 'Edit content'}}, true);
+    this.translateService.setTranslation(
+      'nl',
+      {documentenApiWopi: {editContent: 'Inhoud bewerken'}},
+      true
+    );
+  }
+}
