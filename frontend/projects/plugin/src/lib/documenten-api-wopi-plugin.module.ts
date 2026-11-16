@@ -22,7 +22,7 @@ import {DocumentenApiWopiConfigurationComponent} from './components/documenten-a
 import {PluginTranslatePipeModule} from '@valtimo/plugin';
 import {FormModule, InputModule, SelectModule} from '@valtimo/components';
 import {ConfigService} from '@valtimo/shared';
-import {DOCUMENT_ACTION_ITEM} from '@valtimo/zgw';
+import {DOCUMENT_ACTION_ITEM_TOKEN} from '@valtimo/zgw';
 import {createDocumentenApiWopiActionItem} from './providers/documenten-api-wopi-action-item.provider';
 import {DocumentenApiWopiService} from './services';
 
@@ -32,7 +32,7 @@ import {DocumentenApiWopiService} from './services';
   exports: [DocumentenApiWopiConfigurationComponent],
   providers: [
     {
-      provide: DOCUMENT_ACTION_ITEM,
+      provide: DOCUMENT_ACTION_ITEM_TOKEN,
       useFactory: createDocumentenApiWopiActionItem,
       deps: [DocumentenApiWopiService, ConfigService, Router],
       multi: true,
